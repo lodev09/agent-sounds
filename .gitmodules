@@ -1,4 +1,4 @@
 [submodule ".marketplace"]
 	path = .marketplace
-	url = https://github.com/lodev09/claude-plugins.git
+	url = git@github.com:lodev09/claude-plugins.git
 	ignore = all
