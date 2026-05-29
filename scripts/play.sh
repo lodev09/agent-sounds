@@ -47,7 +47,17 @@ play_sound() {
       afplay -v "$VOLUME" "$SOUND" &
       ;;
     Linux)
-      if command -v pw-play >/dev/null 2>&1; then
+      if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null && command -v powershell.exe >/dev/null 2>&1; then
+        WIN_SOUND="file:$(wslpath -m "$SOUND")"
+        powershell.exe -NoProfile -Command "
+          Add-Type -AssemblyName PresentationCore
+          \$p = New-Object System.Windows.Media.MediaPlayer
+          \$p.Volume = $VOLUME
+          \$p.Open([Uri]::new('$WIN_SOUND'))
+          \$p.Play()
+          Start-Sleep -Seconds 5
+        " &
+      elif command -v pw-play >/dev/null 2>&1; then
         pw-play --volume "$VOLUME" "$SOUND" &
       elif command -v paplay >/dev/null 2>&1; then
         paplay "$SOUND" &
