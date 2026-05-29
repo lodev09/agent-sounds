@@ -41,13 +41,26 @@ while IFS= read -r f; do [[ -f "$f" ]] && existing+=("$f"); done <<< "$files"
 
 SOUND="${existing[RANDOM % ${#existing[@]}]}"
 
+play_powershell() {
+  powershell.exe -NoProfile -Command "
+    Add-Type -AssemblyName PresentationCore
+    \$p = New-Object System.Windows.Media.MediaPlayer
+    \$p.Volume = $VOLUME
+    \$p.Open([Uri]::new('$1'))
+    \$p.Play()
+    Start-Sleep -Seconds 5
+  " &
+}
+
 play_sound() {
   case "$(uname -s)" in
     Darwin)
       afplay -v "$VOLUME" "$SOUND" &
       ;;
     Linux)
-      if command -v pw-play >/dev/null 2>&1; then
+      if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null && command -v powershell.exe >/dev/null 2>&1; then
+        play_powershell "file:$(wslpath -m "$SOUND")"
+      elif command -v pw-play >/dev/null 2>&1; then
         pw-play --volume "$VOLUME" "$SOUND" &
       elif command -v paplay >/dev/null 2>&1; then
         paplay "$SOUND" &
@@ -59,14 +72,7 @@ play_sound() {
       if command -v ffplay >/dev/null 2>&1; then
         ffplay -nodisp -autoexit -loglevel quiet -volume "$(python3 -c "print(int($VOLUME * 100))")" "$SOUND" &
       elif command -v powershell.exe >/dev/null 2>&1; then
-        powershell.exe -NoProfile -Command "
-          Add-Type -AssemblyName PresentationCore
-          \$p = New-Object System.Windows.Media.MediaPlayer
-          \$p.Volume = $VOLUME
-          \$p.Open([Uri]::new('$SOUND'))
-          \$p.Play()
-          Start-Sleep -Seconds 5
-        " &
+        play_powershell "$SOUND"
       fi
       ;;
   esac
