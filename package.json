@@ -1,6 +1,6 @@
 {
   "name": "@lodev09/claude-sounds",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sound feedback for Claude Code — plays Warcraft-style voice lines on session events",
   "author": {
     "name": "Jovanni Lo",
