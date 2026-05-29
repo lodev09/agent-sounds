@@ -40,12 +40,12 @@ write .marketplace/.claude-plugin/marketplace.json \
 # Marketplace repo (separate remote)
 git -C .marketplace add .claude-plugin/marketplace.json
 git -C .marketplace commit -m "$PLUGIN_NAME v$NEW"
-# git -C .marketplace push
+git -C .marketplace push
 
 # This repo
 git add package.json .claude-plugin/plugin.json
 git commit -m "chore: release v$NEW"
 git tag "v$NEW"
-# git push && git push --tags
+git push && git push --tags
 
 echo "Released v$NEW"

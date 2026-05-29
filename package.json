@@ -30,6 +30,9 @@
   "bin": {
     "claude-sounds": "./scripts/cli.sh"
   },
+  "scripts": {
+    "release": "./scripts/release.sh"
+  },
   "files": [
     ".claude-plugin/",
     "hooks/",
