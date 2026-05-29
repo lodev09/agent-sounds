@@ -43,7 +43,7 @@ git -C .marketplace commit -m "$PLUGIN_NAME v$NEW"
 git -C .marketplace push
 
 # This repo
-git add package.json .claude-plugin/plugin.json
+git add package.json .claude-plugin/plugin.json .marketplace
 git commit -m "chore: release v$NEW"
 git tag "v$NEW"
 git push && git push --tags
