@@ -1,0 +1,22 @@
+{
+  "name": "sounds",
+  "version": "1.0.4",
+  "description": "Sound feedback for Codex — plays Warcraft-style voice lines on session events",
+  "author": {
+    "name": "Jovanni Lo",
+    "url": "https://github.com/lodev09"
+  },
+  "homepage": "https://github.com/lodev09/agent-sounds",
+  "repository": "https://github.com/lodev09/agent-sounds",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Sounds",
+    "shortDescription": "Game voice lines for Codex session events",
+    "longDescription": "Plays sounds for session starts, prompts, subagents, permission requests, and completed tasks. Select sound sources, adjust volume, or mute sounds.",
+    "developerName": "Jovanni Lo",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me configure my sound sources and volume."
+  }
+}

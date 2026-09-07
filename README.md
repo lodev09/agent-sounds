@@ -1,31 +1,46 @@
-# claude-sounds
+# agent-sounds
 
-Sound feedback plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Plays Warcraft-style voice lines when Claude starts, receives a prompt, and finishes a task.
+Sound feedback plugin for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Codex](https://learn.chatgpt.com/docs/hooks). Plays Warcraft-style voice lines on session events.
 
 ## Install
 
+### Claude Code
+
 ```sh
-claude plugin marketplace add lodev09/claude-plugins
+claude plugin marketplace add lodev09/agent-plugins
 claude plugin install sounds@lodev09
 ```
+
+### Codex
+
+```sh
+codex plugin marketplace add lodev09/agent-plugins
+codex plugin add sounds@lodev09
+```
+
+Review and trust the plugin hooks in Codex. Then start a new session.
+
+The shared hooks use `PLUGIN_ROOT`, with `CLAUDE_PLUGIN_ROOT` as a fallback for Claude Code. See the [Codex hooks documentation](https://learn.chatgpt.com/docs/hooks#plugin-bundled-hooks).
+
+### CLI
 
 For CLI access, also install via npm:
 
 ```sh
-npm install -g @lodev09/claude-sounds
+npm install -g @lodev09/agent-sounds
 ```
 
 ## Hook Events
 
-| Event | Sound | Description |
-|-------|-------|-------------|
-| `SessionStart` | `ready` | Greeting when Claude starts |
-| `UserPromptSubmit` | `work` | Acknowledgment when you send a prompt |
-| `SubagentStart` | `work` | Sound when a subagent is spawned |
-| `EnterPlanMode` | `work` | Sound when plan mode is entered |
-| `ExitPlanMode` | `done` | Sound when plan mode is exited |
-| `PermissionRequest` | `ask` | Sound when Claude asks for permission |
-| `Stop` | `done` | Notification when Claude finishes |
+| Event | Sound | Description | Support |
+|-------|-------|-------------|---------|
+| `SessionStart` | `ready` | Session greeting | Claude Code, Codex |
+| `UserPromptSubmit` | `work` | Prompt acknowledgment | Claude Code, Codex |
+| `SubagentStart` | `work` | Subagent start | Claude Code, Codex |
+| `EnterPlanMode` | `work` | Plan mode entry | Claude Code |
+| `ExitPlanMode` | `done` | Plan mode exit | Claude Code |
+| `PermissionRequest` | `ask` | Permission request | Claude Code, Codex |
+| `Stop` | `done` | Task completion | Claude Code, Codex |
 
 Each event plays a random sound from enabled sources, mapped via `source.json`.
 
@@ -38,18 +53,28 @@ Each event plays a random sound from enabled sources, mapped via `source.json`.
 
 ## Usage
 
-Use `/sounds` inside Claude Code or `claude-sounds` from the terminal (requires npm install).
+Use `/sounds` inside Claude Code or `$sounds` inside Codex.
+
+For terminal access, use `agent-sounds` after the npm install. Add `--codex` before the command to manage the Codex installation:
 
 ```sh
-claude-sounds                          # Interactive source select
-claude-sounds sounds [source]          # List sources or show sounds for a source
-claude-sounds enable <source|all>
-claude-sounds disable <source|all>
-claude-sounds on                       # Turn sounds on
-claude-sounds off                      # Turn sounds off
-claude-sounds play <event>             # Play a sound (ready, work, done, ask)
-claude-sounds volume [0-1]             # Get or set volume
-claude-sounds status                   # Show install info
+agent-sounds --codex
+agent-sounds --codex volume 0.5
+agent-sounds --codex status
+```
+
+Each plugin installation has its own sound config.
+
+```sh
+agent-sounds                          # Interactive source select
+agent-sounds sounds [source]          # List sources or show sounds for a source
+agent-sounds enable <source|all>
+agent-sounds disable <source|all>
+agent-sounds on                       # Turn sounds on
+agent-sounds off                      # Turn sounds off
+agent-sounds play <event>             # Play a sound (ready, work, done, ask)
+agent-sounds volume [0-1]             # Get or set volume
+agent-sounds status                   # Show install info
 ```
 
 ## Customization

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+ROOT="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}}"
 CONFIG="$ROOT/config.json"
 
 DEFAULT_VOLUME="0.25"
@@ -142,7 +142,7 @@ cmd_select() {
 cmd_enable() {
   local pack="$1"
   if [ -z "$pack" ]; then
-    err "Usage: claude-sounds enable <source|all>"
+    err "Usage: agent-sounds enable <source|all>"
     exit 1
   fi
 
@@ -192,7 +192,7 @@ else:
 cmd_disable() {
   local pack="$1"
   if [ -z "$pack" ]; then
-    err "Usage: claude-sounds disable <source|all>"
+    err "Usage: agent-sounds disable <source|all>"
     exit 1
   fi
 
@@ -281,7 +281,7 @@ cmd_off() {
 cmd_play() {
   local event="$1"
   if [ -z "$event" ]; then
-    err "Usage: claude-sounds play <event>"
+    err "Usage: agent-sounds play <event>"
     dim "Events: $EVENTS"
     exit 1
   fi
@@ -326,7 +326,8 @@ cmd_status() {
 }
 
 cmd_help() {
-  printf "Usage: ${DIM}claude-sounds${RESET} [command]\n"
+  printf "Usage: ${DIM}agent-sounds${RESET} [--codex] [command]\n"
+  echo "  --codex                    Use the Codex plugin installation"
   echo ""
   printf "${DIM}Commands:${RESET}\n"
   echo "  (no args)                  Interactive source select"

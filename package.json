@@ -1,7 +1,7 @@
 {
-  "name": "@lodev09/claude-sounds",
+  "name": "@lodev09/agent-sounds",
   "version": "1.0.4",
-  "description": "Sound feedback for Claude Code — plays Warcraft-style voice lines on session events",
+  "description": "Sound feedback for Claude Code and Codex — plays Warcraft-style voice lines on session events",
   "author": {
     "name": "Jovanni Lo",
     "url": "https://github.com/lodev09"
@@ -11,6 +11,8 @@
     "claude-code-plugin",
     "claude",
     "anthropic",
+    "codex",
+    "openai",
     "sounds",
     "audio",
     "hooks",
@@ -22,19 +24,20 @@
     "cli"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/lodev09/claude-sounds",
+  "homepage": "https://github.com/lodev09/agent-sounds",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lodev09/claude-sounds.git"
+    "url": "https://github.com/lodev09/agent-sounds.git"
   },
   "bin": {
-    "claude-sounds": "./scripts/cli.sh"
+    "agent-sounds": "./scripts/cli.sh"
   },
   "scripts": {
     "release": "./scripts/release.sh"
   },
   "files": [
     ".claude-plugin/",
+    ".codex-plugin/",
     "hooks/",
     "skills/",
     "scripts/",

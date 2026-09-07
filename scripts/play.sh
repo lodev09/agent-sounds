@@ -3,7 +3,7 @@ EVENT="$1"
 
 [ -z "$EVENT" ] && exit 0
 
-ROOT="${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+ROOT="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}}"
 CONFIG="$ROOT/config.json"
 
 [ ! -f "$CONFIG" ] && exit 0

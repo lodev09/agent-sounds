@@ -34,6 +34,7 @@ write() { tmp="$(mktemp)"; jq "$2" "$1" > "$tmp" && mv "$tmp" "$1"; }
 
 write package.json ".version = \"$NEW\""
 write .claude-plugin/plugin.json ".version = \"$NEW\""
+write .codex-plugin/plugin.json ".version = \"$NEW\""
 write .marketplace/.claude-plugin/marketplace.json \
   "(.plugins[] | select(.name == \"$PLUGIN_NAME\") | .version) = \"$NEW\""
 
@@ -43,7 +44,7 @@ git -C .marketplace commit -m "$PLUGIN_NAME v$NEW"
 git -C .marketplace push
 
 # This repo
-git add package.json .claude-plugin/plugin.json .marketplace
+git add package.json .claude-plugin/plugin.json .codex-plugin/plugin.json .marketplace
 git commit -m "chore: release v$NEW"
 git tag "v$NEW"
 git push && git push --tags
