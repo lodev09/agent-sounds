@@ -7,7 +7,7 @@ description: Manage Claude Code and Codex sound feedback. Select sound packs, en
 
 Set `ROOT` to `../..` relative to the directory that contains this `SKILL.md`. Use the absolute skill path from the current session.
 
-Run the script from that installation so commands update the same config that its hooks use.
+Config is shared across Claude Code and Codex at `~/.config/agent-sounds/config.json`.
 
 ## With arguments
 

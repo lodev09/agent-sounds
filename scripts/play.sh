@@ -4,7 +4,8 @@ EVENT="$1"
 [ -z "$EVENT" ] && exit 0
 
 ROOT="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}}"
-CONFIG="$ROOT/config.json"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/agent-sounds/config.json"
+[ -f "$CONFIG" ] || CONFIG="$ROOT/config.json"
 
 [ ! -f "$CONFIG" ] && exit 0
 
@@ -21,7 +22,7 @@ files=$(python3 -c "
 import json, os
 root = '$ROOT'
 event = '$EVENT'
-with open('$ROOT/config.json') as f:
+with open('$CONFIG') as f:
     config = json.load(f)
 for pack in config.get('enabled', []):
     path = os.path.join(root, 'sounds', pack, 'source.json')

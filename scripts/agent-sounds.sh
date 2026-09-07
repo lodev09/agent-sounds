@@ -2,7 +2,14 @@
 set -e
 
 ROOT="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}}"
-CONFIG="$ROOT/config.json"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/agent-sounds"
+CONFIG="$CONFIG_DIR/config.json"
+
+# Shared across Claude Code and Codex installs; seeded from bundled defaults
+if [ ! -f "$CONFIG" ]; then
+  mkdir -p "$CONFIG_DIR"
+  cp "$ROOT/config.json" "$CONFIG"
+fi
 
 DEFAULT_VOLUME="0.25"
 EVENTS="ready work done ask"
@@ -319,6 +326,7 @@ cmd_status() {
   muted=$(python3 -c "import json; print(json.load(open('$CONFIG')).get('muted', False))")
 
   printf "${DIM}root${RESET}      %s\n" "$ROOT"
+  printf "${DIM}config${RESET}    %s\n" "$CONFIG"
   printf "${DIM}sounds${RESET}    %s\n" "$([ "$muted" = "True" ] && echo "off" || echo "on")"
   printf "${DIM}enabled${RESET}   %s\n" "${enabled:-none}"
   printf "${DIM}available${RESET} %s\n" "$available"

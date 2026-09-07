@@ -63,7 +63,7 @@ agent-sounds --codex volume 0.5
 agent-sounds --codex status
 ```
 
-Each plugin installation has its own sound config.
+Config is shared across Claude Code and Codex at `~/.config/agent-sounds/config.json` (respects `XDG_CONFIG_HOME`). Disabling a source in one applies to both.
 
 ```sh
 agent-sounds                          # Interactive source select
