@@ -335,8 +335,7 @@ cmd_status() {
 }
 
 cmd_help() {
-  printf "Usage: ${DIM}agent-sounds${RESET} [--codex] [command]\n"
-  echo "  --codex                    Use the Codex plugin installation"
+  printf "Usage: ${DIM}agent-sounds${RESET} [command]\n"
   echo ""
   printf "${DIM}Commands:${RESET}\n"
   echo "  (no args)                  Interactive source select"

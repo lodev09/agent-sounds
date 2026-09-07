@@ -55,15 +55,9 @@ Each event plays a random sound from enabled sources, mapped via `source.json`.
 
 Use `/sounds` inside Claude Code or `$sounds` inside Codex.
 
-For terminal access, use `agent-sounds` after the npm install. Add `--codex` before the command to manage the Codex installation:
+For terminal access, use `agent-sounds` after the npm install.
 
-```sh
-agent-sounds --codex
-agent-sounds --codex volume 0.5
-agent-sounds --codex status
-```
-
-Config is shared across Claude Code and Codex at `~/.config/agent-sounds/config.json` (respects `XDG_CONFIG_HOME`). Disabling a source in one applies to both.
+Config is shared across Claude Code, Codex, and the CLI at `~/.config/agent-sounds/config.json` (respects `XDG_CONFIG_HOME`). Disabling a source in one applies everywhere.
 
 ```sh
 agent-sounds                          # Interactive source select
