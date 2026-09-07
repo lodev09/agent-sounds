@@ -69,6 +69,7 @@ agent-sounds off                      # Turn sounds off
 agent-sounds play <event>             # Play a sound (ready, work, done, ask)
 agent-sounds volume [0-1]             # Get or set volume
 agent-sounds status                   # Show install info
+agent-sounds update                   # Update Claude Code and Codex plugins
 ```
 
 ## Customization

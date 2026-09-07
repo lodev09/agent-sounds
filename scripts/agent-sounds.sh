@@ -13,6 +13,8 @@ fi
 
 DEFAULT_VOLUME="0.25"
 EVENTS="ready work done ask"
+MARKETPLACE="lodev09"
+PLUGIN="sounds@$MARKETPLACE"
 
 source "$(dirname "${BASH_SOURCE[0]}")/spin.sh"
 
@@ -334,6 +336,29 @@ cmd_status() {
   printf "${DIM}volume${RESET}    %s\n" "$volume"
 }
 
+cmd_update() {
+  local found=0
+
+  if command -v claude >/dev/null; then
+    found=1
+    spin "Claude Code: update marketplace" claude plugin marketplace update "$MARKETPLACE"
+    spin "Claude Code: update plugin" claude plugin update "$PLUGIN"
+  fi
+
+  if command -v codex >/dev/null; then
+    found=1
+    spin "Codex: upgrade marketplace" codex plugin marketplace upgrade "$MARKETPLACE"
+    spin "Codex: update plugin" codex plugin add "$PLUGIN"
+  fi
+
+  if [ "$found" -eq 0 ]; then
+    err "Neither claude nor codex CLI found"
+    exit 1
+  fi
+
+  dim "Restart sessions to apply"
+}
+
 cmd_help() {
   printf "Usage: ${DIM}agent-sounds${RESET} [command]\n"
   echo ""
@@ -347,6 +372,7 @@ cmd_help() {
   echo "  play <event>               Play a sound event"
   echo "  volume [0-1]               Get or set volume"
   echo "  status                     Show install info"
+  echo "  update                     Update Claude Code and Codex plugins"
   echo "  --help                     Show this help"
   echo ""
   printf "${DIM}Sources:${RESET} $(get_available | tr '\n' ' ')\n"
@@ -362,6 +388,7 @@ case "${1:-select}" in
   play)        cmd_play "${2:-}" ;;
   volume)      cmd_volume "${2:-}" ;;
   status)      cmd_status ;;
+  update)      cmd_update ;;
   --help)      cmd_help ;;
   *)           cmd_help; exit 1 ;;
 esac
