@@ -1,6 +1,6 @@
 {
   "name": "@lodev09/agent-sounds",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Sound feedback for Claude Code and Codex — plays Warcraft-style voice lines on session events",
   "author": {
     "name": "Jovanni Lo",

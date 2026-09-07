@@ -1,6 +1,6 @@
 {
   "name": "sounds",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Sound feedback for Claude Code — plays Warcraft-style voice lines on session events",
   "author": {
     "name": "Jovanni Lo",
