@@ -1,10 +1,15 @@
 #!/bin/bash
-# Bump version across package.json, plugin.json, and the marketplace submodule, then commit/tag/push both repos.
+# Bump version across package.json, plugin.json, and the marketplace submodule,
+# then commit/tag/push both repos and create a GitHub release.
 # Usage: scripts/release.sh <patch|minor|major|x.y.z>
 set -e
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+
+source scripts/spin.sh
+
+command -v gh >/dev/null || { err "gh CLI required"; exit 1; }
 
 BUMP="${1:-patch}"
 PLUGIN_NAME="$(jq -r .name .claude-plugin/plugin.json)"
@@ -25,28 +30,43 @@ case "$BUMP" in
     NEW="$MA.$MI.$PA"
     ;;
   [0-9]*.[0-9]*.[0-9]*) NEW="$BUMP" ;;
-  *) echo "Invalid bump: $BUMP (use patch|minor|major|x.y.z)" >&2; exit 1 ;;
+  *) err "Invalid bump: $BUMP (use patch|minor|major|x.y.z)"; exit 1 ;;
 esac
 
-echo "$PLUGIN_NAME: $CURRENT -> $NEW"
+printf "${BOLD}%s${RESET} ${DIM}v%s${RESET} → ${GREEN}v%s${RESET}\n\n" "$PLUGIN_NAME" "$CURRENT" "$NEW"
 
 write() { tmp="$(mktemp)"; jq "$2" "$1" > "$tmp" && mv "$tmp" "$1"; }
 
-write package.json ".version = \"$NEW\""
-write .claude-plugin/plugin.json ".version = \"$NEW\""
-write .codex-plugin/plugin.json ".version = \"$NEW\""
-write .marketplace/.claude-plugin/marketplace.json \
-  "(.plugins[] | select(.name == \"$PLUGIN_NAME\") | .version) = \"$NEW\""
+bump_versions() {
+  write package.json ".version = \"$NEW\""
+  write .claude-plugin/plugin.json ".version = \"$NEW\""
+  write .codex-plugin/plugin.json ".version = \"$NEW\""
+  write .marketplace/.claude-plugin/marketplace.json \
+    "(.plugins[] | select(.name == \"$PLUGIN_NAME\") | .version) = \"$NEW\""
+}
 
-# Marketplace repo (separate remote)
-git -C .marketplace add .claude-plugin/marketplace.json
-git -C .marketplace commit -m "$PLUGIN_NAME v$NEW"
-git -C .marketplace push
+push_marketplace() {
+  git -C .marketplace add .claude-plugin/marketplace.json
+  git -C .marketplace commit -m "$PLUGIN_NAME v$NEW"
+  git -C .marketplace push
+}
 
-# This repo
-git add package.json .claude-plugin/plugin.json .codex-plugin/plugin.json .marketplace
-git commit -m "chore: release v$NEW"
-git tag "v$NEW"
-git push && git push --tags
+push_repo() {
+  git add package.json .claude-plugin/plugin.json .codex-plugin/plugin.json .marketplace
+  git commit -m "chore: release v$NEW"
+  git tag "v$NEW"
+  git push && git push --tags
+}
 
-echo "Released v$NEW"
+create_release() {
+  gh release create "v$NEW" --title "v$NEW" --generate-notes
+}
+
+spin "Bump versions" bump_versions
+spin "Push marketplace" push_marketplace
+spin "Push v$NEW" push_repo
+spin "Create GitHub release" create_release
+
+printf "\n${GREEN}Released v%s${RESET}\n" "$NEW"
+dim "$(gh release view "v$NEW" --json url -q .url)"
+printf "\n${BOLD}Next:${RESET} npm publish\n"
