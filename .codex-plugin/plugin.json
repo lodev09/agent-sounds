@@ -1,6 +1,6 @@
 {
   "name": "sounds",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Sound feedback for Codex — plays Warcraft-style voice lines on session events",
   "author": {
     "name": "Jovanni Lo",
